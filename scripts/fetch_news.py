@@ -79,10 +79,23 @@ def parse_date(value: str | None) -> datetime | None:
     return dt.astimezone(timezone.utc)
 
 
+def repair_xml(data: bytes) -> bytes:
+    """Behebt typische Fehler schlampig erzeugter Feeds: nackte '&', HTML-Entities, Steuerzeichen."""
+    text = data.decode("utf-8", errors="replace")
+    text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text)
+    text = re.sub(r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)(\w+;)?",
+                  lambda m: html.escape(html.unescape(m.group(0))) if m.group(1) else "&amp;", text)
+    text = re.sub(r"^<\?xml[^>]*\?>", "", text)
+    return text.encode("utf-8")
+
+
 def parse_feed(data: bytes) -> list[dict]:
     """Liest RSS 2.0, RSS 1.0 (RDF) und Atom. Gibt rohe Eintraege zurueck."""
     data = data.lstrip(b"\xef\xbb\xbf \t\r\n")
-    root = ET.fromstring(data)
+    try:
+        root = ET.fromstring(data)
+    except ET.ParseError:
+        root = ET.fromstring(repair_xml(data))
     entries = []
     for node in root.iter():
         if _local(node.tag) not in ("item", "entry"):
@@ -209,7 +222,9 @@ def load_json(path: Path, default):
         return default
 
 
-def collect_source(source: dict, scorer: Scorer, now: datetime, limit: int) -> tuple[list[dict], dict]:
+def collect_source(
+    source: dict, scorer: Scorer, now: datetime, limit: int, trusted: list[str] = ()
+) -> tuple[list[dict], dict]:
     status = {"name": source["name"], "ok": False, "count": 0, "error": None}
     try:
         entries = parse_feed(download(source["url"]))
@@ -228,6 +243,8 @@ def collect_source(source: dict, scorer: Scorer, now: datetime, limit: int) -> t
             if origin and title.endswith(f" - {origin}"):
                 title = title[: -len(origin) - 3].strip()
             display_source, via, summary = origin or "Google News", "Google News", ""
+            if source.get("trusted_only") and not any(t.lower() in origin.lower() for t in trusted):
+                continue
         if not title:
             continue
         topics, combos, score = scorer.score(title, summary, source)
@@ -381,7 +398,9 @@ def main() -> int:
     parser.add_argument("--no-notify", action="store_true")
     args = parser.parse_args()
 
-    sources = load_json(args.sources, {})["sources"]
+    source_cfg = load_json(args.sources, {})
+    sources = source_cfg["sources"]
+    trusted = source_cfg.get("trusted_publishers", [])
     cfg = load_json(args.topics, {})
     settings = cfg.get("settings", {})
     scorer = Scorer(cfg)
@@ -395,14 +414,22 @@ def main() -> int:
     fresh, statuses = [], []
     limit = settings.get("max_items_per_feed", 60)
     with ThreadPoolExecutor(max_workers=8) as pool:
-        results = pool.map(lambda s: collect_source(s, scorer, now, limit), sources)
+        results = pool.map(lambda s: collect_source(s, scorer, now, limit, trusted), sources)
         for source, (items, status) in zip(sources, results):
             fresh += items
             statuses.append(status)
             mark = "ok " if status["ok"] else "FEHLER"
             print(f"  [{mark}] {source['name']}: {status['count']} relevant" + (f" – {status['error']}" if status["error"] else ""))
 
-    items = merge((previous or {}).get("items", []), fresh, now, settings)
+    # Archiv bereinigen, falls eine Quelle inzwischen gefiltert oder entfernt wurde.
+    filtered_feeds = {s["name"] for s in sources if s.get("trusted_only")}
+    known_feeds = {s["name"] for s in sources}
+    kept = [
+        i for i in (previous or {}).get("items", [])
+        if i.get("feed") in known_feeds
+        and (i.get("feed") not in filtered_feeds or any(t.lower() in i["source"].lower() for t in trusted))
+    ]
+    items = merge(kept, fresh, now, settings)
     sent = 0 if args.no_notify else send_notifications(items, now, settings, first_run)
 
     data = {

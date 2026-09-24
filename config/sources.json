@@ -1,5 +1,16 @@
 {
   "_hinweis": "Quellen des Informationszentrums. priority: 0-3 (Bonus fuer die Relevanz), include_all: true = jede Meldung uebernehmen, auch ohne Themen-Treffer. type: google_news = Google-News-Suche (Titel enthaelt die Originalquelle). Neue Quelle: einfach einen Eintrag ergaenzen.",
+  "_hinweis_trusted": "Bei Quellen mit trusted_only: true werden nur Meldungen dieser Verlage uebernommen (Teilstring, Gross-/Kleinschreibung egal).",
+  "trusted_publishers": [
+    "Bloomberg", "Economist", "Financial Times", "Reuters", "Wall Street Journal", "WSJ", "CNBC", "Fortune",
+    "Business Insider", "Axios", "New York Times", "Washington Post", "Guardian", "BBC", "Associated Press", "AP News",
+    "S&P Global", "Moody", "McKinsey", "Harvard Business", "MIT Technology Review", "TechCrunch", "Wired", "The Verge",
+    "American Banker", "The Banker", "Banking Dive", "Finextra", "The Financial Brand", "Risk.net", "Euromoney",
+    "Handelsblatt", "FAZ", "Frankfurter Allgemeine", "Süddeutsche", "Spiegel", "Zeit", "Welt", "tagesschau", "ZDF",
+    "Börsen-Zeitung", "WirtschaftsWoche", "Manager Magazin", "Capital", "Der Bank Blog", "FinanzBusiness",
+    "Finance Magazin", "heise", "t3n", "Golem", "CIO DE", "Computerwoche", "BaFin", "Bundesbank", "EZB", "ECB",
+    "NZZ", "Der Standard", "Neue Zürcher", "finews", "Yahoo Finance", "Barron", "MarketWatch", "Forbes", "EY", "PwC", "Deloitte", "KPMG"
+  ],
   "sources": [
     {"name": "Bloomberg Markets", "url": "https://feeds.bloomberg.com/markets/news.rss", "priority": 3, "lang": "en"},
     {"name": "Bloomberg Technology", "url": "https://feeds.bloomberg.com/technology/news.rss", "priority": 3, "lang": "en"},
@@ -20,7 +31,6 @@
     {"name": "CNBC · Technology", "url": "https://www.cnbc.com/id/19854910/device/rss/rss.html", "priority": 1, "lang": "en"},
 
     {"name": "Handelsblatt · Finanzen", "url": "https://www.handelsblatt.com/contentexport/feed/finanzen", "priority": 2, "lang": "de"},
-    {"name": "Handelsblatt · Technik", "url": "https://www.handelsblatt.com/contentexport/feed/technik", "priority": 2, "lang": "de"},
     {"name": "FAZ · Finanzen", "url": "https://www.faz.net/rss/aktuell/finanzen/", "priority": 2, "lang": "de"},
     {"name": "tagesschau · Wirtschaft", "url": "https://www.tagesschau.de/wirtschaft/index~rss2.xml", "priority": 1, "lang": "de"},
     {"name": "heise online", "url": "https://www.heise.de/rss/heise-atom.xml", "priority": 1, "lang": "de"},
@@ -28,7 +38,6 @@
     {"name": "Finextra", "url": "https://www.finextra.com/rss/headlines.aspx", "priority": 2, "lang": "en", "include_all": true},
     {"name": "American Banker", "url": "https://www.americanbanker.com/feed", "priority": 2, "lang": "en"},
     {"name": "The Financial Brand", "url": "https://thefinancialbrand.com/feed/", "priority": 1, "lang": "en"},
-    {"name": "FinTech Futures", "url": "https://www.fintechfutures.com/feed/", "priority": 1, "lang": "en"},
 
     {"name": "EZB · Pressemitteilungen", "url": "https://www.ecb.europa.eu/rss/press.html", "priority": 2, "lang": "en", "include_all": true},
     {"name": "EZB-Bankenaufsicht", "url": "https://www.bankingsupervision.europa.eu/rss/press.html", "priority": 2, "lang": "en", "include_all": true},
@@ -43,9 +52,9 @@
      "url": "https://news.google.com/rss/search?q=site:bloomberg.com+(AI+OR+%22artificial+intelligence%22)+(bank+OR+banks+OR+banking+OR+finance)+when:3d&hl=en-US&gl=US&ceid=US:en"},
     {"name": "Google News · Economist KI & Finanzen", "type": "google_news", "priority": 2, "lang": "en",
      "url": "https://news.google.com/rss/search?q=site:economist.com+(AI+OR+%22artificial+intelligence%22+OR+bank+OR+fintech)+when:7d&hl=en-US&gl=US&ceid=US:en"},
-    {"name": "Google News · Generative AI in Banking", "type": "google_news", "priority": 1, "lang": "en",
+    {"name": "Google News · Generative AI in Banking", "type": "google_news", "trusted_only": true, "priority": 1, "lang": "en",
      "url": "https://news.google.com/rss/search?q=%22generative+AI%22+(bank+OR+banks+OR+banking)+when:2d&hl=en-US&gl=US&ceid=US:en"},
-    {"name": "Google News · KI bei Banken", "type": "google_news", "priority": 1, "lang": "de",
+    {"name": "Google News · KI bei Banken", "type": "google_news", "trusted_only": true, "priority": 1, "lang": "de",
      "url": "https://news.google.com/rss/search?q=(KI+OR+%22K%C3%BCnstliche+Intelligenz%22)+(Bank+OR+Banken+OR+Sparkasse+OR+Finanzbranche)+when:2d&hl=de&gl=DE&ceid=DE:de"}
   ]
 }

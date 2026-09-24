@@ -51,6 +51,13 @@ class ParsingTests(unittest.TestCase):
         self.assertEqual(atom[0]["link"], "https://example.org/ai-act")
         self.assertIsNotNone(fn.parse_date(atom[0]["date"]))
 
+    def test_repairs_broken_xml(self):
+        bad = b'<?xml version="1.0"?><rss><channel><item><title>AI & banks&nbsp;now</title>' \
+              b'<link>https://x.com/?a=1&b=2</link></item></channel></rss>'
+        entry = fn.parse_feed(bad)[0]
+        self.assertEqual(entry["link"], "https://x.com/?a=1&b=2")
+        self.assertIn("AI & banks", entry["title"])
+
     def test_clean_text_and_url(self):
         self.assertEqual(fn.clean_text("&lt;p&gt;Die &lt;b&gt;Bank&lt;/b&gt;&lt;/p&gt;"), "Die Bank")
         self.assertEqual(fn.normalize_url("https://Ex.com/a?utm_source=x&id=1#top"), "https://ex.com/a?id=1")
@@ -115,6 +122,16 @@ class EndToEndTest(unittest.TestCase):
             self.assertEqual(
                 next(i for i in data2["items"] if i["title"].startswith("JPMorgan"))["first_seen"], first_seen
             )
+
+    def test_trusted_only_filters_unknown_publishers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "g.xml"
+            path.write_text(GNEWS.replace("Bloomberg", "Vietnam.vn"), encoding="utf-8")
+            source = {"name": "GN", "url": path.as_uri(), "type": "google_news", "trusted_only": True}
+            scorer = fn.Scorer(json.loads((ROOT / "config" / "topics.json").read_text()))
+            self.assertEqual(fn.collect_source(source, scorer, NOW, 50, ["Bloomberg"])[0], [])
+            path.write_text(GNEWS, encoding="utf-8")
+            self.assertEqual(len(fn.collect_source(source, scorer, NOW, 50, ["Bloomberg"])[0]), 1)
 
     def test_old_items_expire(self):
         old = (NOW - timedelta(days=30)).isoformat()
