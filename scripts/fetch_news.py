@@ -95,7 +95,10 @@ def parse_feed(data: bytes) -> list[dict]:
     try:
         root = ET.fromstring(data)
     except ET.ParseError:
-        root = ET.fromstring(repair_xml(data))
+        try:
+            root = ET.fromstring(repair_xml(data))
+        except ET.ParseError:
+            return parse_feed_loose(data.decode("utf-8", errors="replace"))
     entries = []
     for node in root.iter():
         if _local(node.tag) not in ("item", "entry"):
@@ -128,6 +131,35 @@ def parse_feed(data: bytes) -> list[dict]:
         if entry.get("title") and (entry.get("link") or entry.get("guid", "").startswith("http")):
             entry.setdefault("link", entry.get("guid"))
             entries.append(entry)
+    return entries
+
+
+def parse_feed_loose(text: str) -> list[dict]:
+    """Letzte Rueckfallstufe fuer kaputtes XML: Eintraege per Regex herauslesen."""
+    def field(block: str, *names: str) -> str | None:
+        for name in names:
+            m = re.search(rf"<(?:\w+:)?{name}\b[^>]*>(.*?)</(?:\w+:)?{name}>", block, re.S | re.I)
+            if m:
+                value = m.group(1).strip()
+                cdata = re.fullmatch(r"<!\[CDATA\[(.*?)\]\]>", value, re.S)
+                return html.unescape(cdata.group(1) if cdata else value).strip()
+        return None
+
+    entries = []
+    for block in re.findall(r"<(item|entry)\b[^>]*>(.*?)</\1>", text, re.S | re.I):
+        body = block[1]
+        link = field(body, "link")
+        if not link:
+            m = re.search(r"<link\b[^>]*href=[\"']([^\"']+)", body, re.I)
+            link = html.unescape(m.group(1)) if m else field(body, "guid", "id")
+        entry = {
+            "title": field(body, "title"),
+            "link": link,
+            "summary": field(body, "description", "summary", "encoded", "content"),
+            "date": field(body, "pubDate", "published", "date", "updated"),
+        }
+        if entry["title"] and entry["link"] and entry["link"].startswith("http"):
+            entries.append({k: v for k, v in entry.items() if v})
     return entries
 
 

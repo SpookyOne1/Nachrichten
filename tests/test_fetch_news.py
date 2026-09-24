@@ -58,6 +58,15 @@ class ParsingTests(unittest.TestCase):
         self.assertEqual(entry["link"], "https://x.com/?a=1&b=2")
         self.assertIn("AI & banks", entry["title"])
 
+    def test_loose_fallback_for_hopeless_xml(self):
+        bad = b'<rss><channel><item><title><![CDATA[Banks <3 AI]]></title>' \
+              b'<link>https://x.com/a</link><pubDate>Tue, 01 Sep 2026 10:00:00 GMT</pubDate>' \
+              b'<description>a < b</description></item><item><title>Two</title>' \
+              b'<link>https://x.com/b</link></item></channel></rss>'
+        entries = fn.parse_feed(bad)
+        self.assertEqual([e["link"] for e in entries], ["https://x.com/a", "https://x.com/b"])
+        self.assertEqual(entries[0]["title"], "Banks <3 AI")
+
     def test_clean_text_and_url(self):
         self.assertEqual(fn.clean_text("&lt;p&gt;Die &lt;b&gt;Bank&lt;/b&gt;&lt;/p&gt;"), "Die Bank")
         self.assertEqual(fn.normalize_url("https://Ex.com/a?utm_source=x&id=1#top"), "https://ex.com/a?id=1")
