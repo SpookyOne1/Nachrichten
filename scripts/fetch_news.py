@@ -263,6 +263,9 @@ def collect_source(
     except Exception as exc:  # noqa: BLE001 - jede Stoerung einer Quelle nur melden
         status["error"] = f"{type(exc).__name__}: {exc}"[:200]
         return [], status
+    if not entries:
+        status["error"] = "Keine Einträge gefunden (Feed leer oder Bot-Schutz)"
+        return [], status
 
     items = []
     for entry in entries[:limit]:

@@ -36,8 +36,10 @@
     {"name": "heise online", "url": "https://www.heise.de/rss/heise-atom.xml", "priority": 1, "lang": "de"},
 
     {"name": "Finextra", "url": "https://www.finextra.com/rss/headlines.aspx", "priority": 2, "lang": "en", "include_all": true},
-    {"name": "American Banker", "url": "https://www.americanbanker.com/feed", "priority": 2, "lang": "en"},
-    {"name": "The Financial Brand", "url": "https://thefinancialbrand.com/feed/", "priority": 1, "lang": "en"},
+    {"name": "Google News · American Banker", "type": "google_news", "priority": 2, "lang": "en",
+     "url": "https://news.google.com/rss/search?q=site:americanbanker.com+when:3d&hl=en-US&gl=US&ceid=US:en"},
+    {"name": "Google News · The Financial Brand", "type": "google_news", "priority": 1, "lang": "en",
+     "url": "https://news.google.com/rss/search?q=site:thefinancialbrand.com+when:7d&hl=en-US&gl=US&ceid=US:en"},
 
     {"name": "EZB · Pressemitteilungen", "url": "https://www.ecb.europa.eu/rss/press.html", "priority": 2, "lang": "en", "include_all": true},
     {"name": "EZB-Bankenaufsicht", "url": "https://www.bankingsupervision.europa.eu/rss/press.html", "priority": 2, "lang": "en", "include_all": true},
