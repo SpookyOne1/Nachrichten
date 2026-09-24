@@ -87,6 +87,14 @@ class ScoringTests(unittest.TestCase):
         # Keine Fehltreffer: "said"/"maintain" enthalten "ai", "financial" enthaelt "fin".
         self.assertEqual(self.topics("He said the fed up fans remain calm"), [])
 
+    def test_krypto_banken(self):
+        topics, combos, _ = self.scorer.score("Deutsche Bank startet Stablecoin für Firmenkunden", "", {})
+        self.assertIn("krypto", topics)
+        self.assertIn("krypto-banken", combos)
+        _, combos, _ = self.scorer.score("Sparkassen ermöglichen Bitcoin-Handel in der App", "", {})
+        self.assertIn("krypto-banken", combos)
+        self.assertNotIn("krypto", self.topics("Custody battle over the family circle"))
+
     def test_combo_ranks_higher(self):
         _, combos, both = self.scorer.score("Banks adopt generative AI", "", {"priority": 2})
         _, _, single = self.scorer.score("Football and AI", "", {"priority": 2})

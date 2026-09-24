@@ -9,7 +9,8 @@
     "Handelsblatt", "FAZ", "Frankfurter Allgemeine", "Süddeutsche", "Spiegel", "Zeit", "Welt", "tagesschau", "ZDF",
     "Börsen-Zeitung", "WirtschaftsWoche", "Manager Magazin", "Capital", "Der Bank Blog", "FinanzBusiness",
     "Finance Magazin", "heise", "t3n", "Golem", "CIO DE", "Computerwoche", "BaFin", "Bundesbank", "EZB", "ECB",
-    "NZZ", "Der Standard", "Neue Zürcher", "finews", "Yahoo Finance", "Barron", "MarketWatch", "Forbes", "EY", "PwC", "Deloitte", "KPMG"
+    "NZZ", "Der Standard", "Neue Zürcher", "finews", "Yahoo Finance", "Barron", "MarketWatch", "Forbes", "EY", "PwC", "Deloitte", "KPMG",
+    "CoinDesk", "The Block", "Decrypt", "BTC-ECHO", "BTC ECHO", "Blockworks", "DL News", "Ledger Insights", "Cointelegraph", "BIS", "Bank for International Settlements", "Banking Hub", "IT Finanzmagazin", "Private Banking Magazin", "Das Investment", "finanzen.net", "Institutional Investor", "Global Custodian", "The Paypers", "PYMNTS"
   ],
   "sources": [
     {"name": "Bloomberg Markets", "url": "https://feeds.bloomberg.com/markets/news.rss", "priority": 3, "lang": "en"},
@@ -44,6 +45,13 @@
     {"name": "EZB-Bankenaufsicht", "url": "https://www.bankingsupervision.europa.eu/rss/press.html", "priority": 2, "lang": "en", "include_all": true},
     {"name": "BIZ (BIS) · Pressemitteilungen", "url": "https://www.bis.org/doclist/all_pressrels.rss", "priority": 2, "lang": "en", "include_all": true},
 
+    {"name": "CoinDesk", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/", "priority": 1, "lang": "en"},
+    {"name": "The Block", "url": "https://www.theblock.co/rss.xml", "priority": 1, "lang": "en"},
+    {"name": "BTC-ECHO", "url": "https://www.btc-echo.de/feed/", "priority": 1, "lang": "de"},
+    {"name": "Google News · Stablecoins & Tokenisierung bei Banken", "type": "google_news", "trusted_only": true, "priority": 2, "lang": "en",
+     "url": "https://news.google.com/rss/search?q=(stablecoin+OR+tokenization+OR+tokenized+OR+%22digital+assets%22+OR+crypto)+(bank+OR+banks+OR+JPMorgan+OR+HSBC+OR+UBS+OR+%22Deutsche+Bank%22)+when:3d&hl=en-US&gl=US&ceid=US:en"},
+    {"name": "Google News · Krypto & Banken (DE)", "type": "google_news", "trusted_only": true, "priority": 2, "lang": "de",
+     "url": "https://news.google.com/rss/search?q=(Krypto+OR+Blockchain+OR+Stablecoin+OR+Tokenisierung+OR+%22digitaler+Euro%22)+(Bank+OR+Banken+OR+Sparkasse+OR+Volksbank+OR+BaFin)+when:3d&hl=de&gl=DE&ceid=DE:de"},
     {"name": "MIT Technology Review", "url": "https://www.technologyreview.com/feed/", "priority": 2, "lang": "en"},
     {"name": "TechCrunch · AI", "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "priority": 1, "lang": "en"},
     {"name": "The Verge · AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "priority": 1, "lang": "en"},

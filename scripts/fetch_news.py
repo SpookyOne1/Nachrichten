@@ -464,6 +464,12 @@ def main() -> int:
         if i.get("feed") in known_feeds
         and (i.get("feed") not in filtered_feeds or any(t.lower() in i["source"].lower() for t in trusted))
     ]
+    # Archiv mit den aktuellen Stichwoertern neu bewerten (z. B. nach neuem Thema).
+    by_feed = {s["name"]: s for s in sources}
+    for item in kept:
+        topics, combos, score = scorer.score(item["title"], item.get("summary", ""), by_feed[item["feed"]])
+        item.update(topics=topics, combos=combos, score=score)
+    kept = [i for i in kept if i["topics"] or by_feed[i["feed"]].get("include_all")]
     items = merge(kept, fresh, now, settings)
     sent = 0 if args.no_notify else send_notifications(items, now, settings, first_run)
 

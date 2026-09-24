@@ -46,11 +46,27 @@
       "weight": 2,
       "keywords": [
         "fintech*", "neobank*", "challenger bank*", "Revolut", "Klarna", "N26", "Stripe", "Adyen", "Trade Republic",
-        "digital euro", "digitale* Euro*", "CBDC", "stablecoin*", "tokeni*", "Tokenisierung", "blockchain", "DLT",
-        "crypto*", "Krypto*", "bitcoin", "open banking", "open finance", "embedded finance", "instant payment*",
+        "open banking", "open finance", "embedded finance", "instant payment*",
         "Echtzeitzahlung*", "Wero", "digital transformation", "digitale Transformation", "Digitalisierung",
         "innovation*", "Innovations*", "start-up*", "startup*", "quantum", "Quanten*", "automation", "Automatisierung",
         "cloud", "cyber*", "robo-advis*"
+      ]
+    },
+    {
+      "id": "krypto",
+      "label": "Blockchain & Krypto",
+      "color": "#0ea5e9",
+      "weight": 2,
+      "keywords": [
+        "blockchain*", "DLT", "distributed ledger", "crypto*", "Krypto*", "bitcoin*", "BTC", "ether", "ethereum",
+        "stablecoin*", "USDC", "Tether", "USDT", "EURC", "tokeni*", "Tokenisierung", "tokenized", "tokenised",
+        "tokenisiert*", "digital asset*", "digitale* Vermögenswert*", "Kryptowert*", "Kryptoverwahr*",
+        "crypto custody", "digital asset custody", "on-chain", "onchain", "DeFi", "smart contract*",
+        "wallet*", "digital euro", "digitale* Euro*", "CBDC", "wholesale CBDC", "Pontes", "Appia", "Project Agorá",
+        "Project Agora", "mBridge", "Canton Network", "Onyx", "Kinexys", "Partior", "deposit token*", "tokenized deposit*",
+        "MiCA", "MiCAR", "GENIUS Act", "Clarity Act", "crypto ETF*", "bitcoin ETF*", "spot ETF*",
+        "Coinbase", "Binance", "Kraken", "Circle Internet", "Ripple", "XRP", "Bitpanda", "Boerse Stuttgart Digital",
+        "Börse Stuttgart Digital", "21Shares", "Chainlink"
       ]
     },
     {
@@ -68,6 +84,7 @@
   ],
   "combos": [
     {"id": "ki-finanzen", "label": "KI × Finanzen", "topics": ["ki", "finanzen"], "bonus": 3},
+    {"id": "krypto-banken", "label": "Krypto × Banken", "topics": ["krypto", "finanzen"], "bonus": 3},
     {"id": "ki-regulierung", "label": "KI × Regulierung", "topics": ["ki", "regulierung"], "bonus": 2},
     {"id": "fintech-finanzen", "label": "Fintech × Banken", "topics": ["innovation", "finanzen"], "bonus": 1}
   ],
