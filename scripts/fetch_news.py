@@ -16,6 +16,9 @@ import json
 import os
 import re
 import sys
+import threading
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -35,7 +38,13 @@ TRACKING_PARAMS = re.compile(r"^(utm_|fbclid$|gclid$|mc_|cmpid$|ref$|src$|ncid$)
 # --------------------------------------------------------------------------- #
 # Laden und Parsen der Feeds
 # --------------------------------------------------------------------------- #
-def download(url: str, timeout: int = 25) -> bytes:
+# Hosts, die parallele Anfragen mit 503/429 quittieren, werden nacheinander mit Pause abgefragt.
+THROTTLED_HOSTS = {"news.google.com": 2.5}
+_host_locks: dict[str, threading.Lock] = {h: threading.Lock() for h in THROTTLED_HOSTS}
+_host_last: dict[str, float] = {}
+
+
+def download(url: str, timeout: int = 25, retries: int = 2) -> bytes:
     req = urllib.request.Request(
         url,
         headers={
@@ -43,8 +52,26 @@ def download(url: str, timeout: int = 25) -> bytes:
             "Accept": "application/rss+xml, application/atom+xml, application/xml;q=0.9, */*;q=0.8",
         },
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+    host = urllib.parse.urlsplit(url).hostname or ""
+    for attempt in range(retries + 1):
+        try:
+            if host in _host_locks:
+                with _host_locks[host]:
+                    wait = _host_last.get(host, 0) + THROTTLED_HOSTS[host] - time.monotonic()
+                    if wait > 0:
+                        time.sleep(wait)
+                    try:
+                        with urllib.request.urlopen(req, timeout=timeout) as resp:
+                            return resp.read()
+                    finally:
+                        _host_last[host] = time.monotonic()
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429, 502, 503) or attempt == retries:
+                raise
+            time.sleep(5 * 3**attempt)  # 5 s, dann 15 s
+    raise AssertionError("unreachable")
 
 
 def _local(tag: str) -> str:
