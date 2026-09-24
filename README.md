@@ -23,9 +23,10 @@ Optional:
 
 ## Einrichtung (einmalig, ca. 10 Minuten)
 
-1. **Branch `main` anlegen:** Diesen Stand nach `main` mergen und `main` unter
-   *Settings → General → Default branch* als Standard setzen. (Zeitgesteuerte
-   GitHub-Workflows laufen nur auf dem Standard-Branch.)
+1. **Standard-Branch prüfen:** Zeitgesteuerte GitHub-Workflows laufen nur auf dem
+   Standard-Branch (*Settings → General → Default branch*). Aktuell ist das
+   `claude/ai-news-info-center-b0i9ks` – das funktioniert. Wer später auf `main`
+   umstellt, muss dort denselben Stand haben.
 2. **Ersten Lauf starten:** *Actions → „Nachrichten aktualisieren“ → Run workflow*.
    Danach existiert der Branch `gh-pages`.
 3. **Web-App veröffentlichen:** *Settings → Pages → Source: „Deploy from a branch“ →

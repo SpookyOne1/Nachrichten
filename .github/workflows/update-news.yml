@@ -6,7 +6,7 @@ on:
     - cron: "17 * * * *"
   workflow_dispatch: {}
   push:
-    branches: [main]
+    branches: [main, "claude/ai-news-info-center-b0i9ks"]
     paths: ["config/**", "docs/**", "scripts/**", ".github/workflows/update-news.yml"]
 
 permissions:
