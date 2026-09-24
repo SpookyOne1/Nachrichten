@@ -1,0 +1,63 @@
+name: Nachrichten aktualisieren
+
+on:
+  schedule:
+    # Stuendlich (Zeiten in UTC). GitHub startet geplante Laeufe oft einige Minuten verspaetet.
+    - cron: "17 * * * *"
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ["config/**", "docs/**", "scripts/**", ".github/workflows/update-news.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tests
+        run: python -m unittest discover -s tests
+
+      - name: Bisherige Meldungen laden (Archiv, bereits gesendete Push-Nachrichten)
+        run: |
+          mkdir -p docs/data
+          if git fetch --depth=1 origin gh-pages 2>/dev/null \
+             && git show FETCH_HEAD:data/news.json > /tmp/news.json 2>/dev/null; then
+            mv /tmp/news.json docs/data/news.json
+            echo "Vorherigen Stand uebernommen."
+          else
+            echo "Erster Lauf – noch kein gh-pages-Branch."
+          fi
+
+      - name: Nachrichten sammeln
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          NTFY_SERVER: ${{ vars.NTFY_SERVER }}
+        run: python scripts/fetch_news.py
+
+      - name: Auf gh-pages veroeffentlichen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Nur ein einziger Commit auf gh-pages – so bleibt die Historie von main sauber.
+          cd docs
+          touch .nojekyll
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Nachrichten-Update $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

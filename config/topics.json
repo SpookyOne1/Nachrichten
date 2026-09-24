@@ -1,0 +1,79 @@
+{
+  "_hinweis": "Stichwoerter je Thema. 'bank*' = Wortanfang (banking, Bankenaufsicht), '*bank*' = beliebige Stelle (Grossbanken). Kurze Woerter (max. 5 Zeichen) mit Grossbuchstaben (KI, AI, Fed, Visa) werden nur mit exakt dieser Schreibweise erkannt. Leerzeichen passen auch auf Bindestriche.",
+  "settings": {
+    "keep_days": 10,
+    "max_items": 1200,
+    "max_items_per_feed": 60,
+    "top_score": 11,
+    "notify_score": 13,
+    "notify_max_age_hours": 6,
+    "notify_max_per_run": 5
+  },
+  "topics": [
+    {
+      "id": "ki",
+      "label": "KI",
+      "color": "#7c5cff",
+      "weight": 3,
+      "keywords": [
+        "KI", "AI", "GenAI", "LLM*", "künstliche* Intelligenz", "kuenstliche* Intelligenz", "artificial intelligence",
+        "generative", "machine learning", "maschinelles Lernen", "deep learning", "neural network*", "neuronale* Netz*",
+        "large language model*", "Sprachmodell*", "foundation model*", "agentic", "AI agent*", "KI-Agent*",
+        "chatbot*", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Gemini", "Copilot", "Mistral", "DeepMind",
+        "Nvidia", "Sam Altman", "AGI", "superintelligence", "data center*", "Rechenzentr*"
+      ]
+    },
+    {
+      "id": "finanzen",
+      "label": "Banken & Finanzen",
+      "color": "#0f9d74",
+      "weight": 3,
+      "keywords": [
+        "bank", "banks", "banking", "banker*", "*banken", "Bankensektor", "Bankwesen", "lender*",
+        "Sparkasse*", "Volksbank*", "Genossenschaftsbank*", "Deutsche Bank", "Commerzbank", "JPMorgan", "Goldman Sachs",
+        "Morgan Stanley", "Citigroup", "HSBC", "UBS", "BNP Paribas", "Barclays", "Wells Fargo", "Bank of America",
+        "BlackRock", "asset manage*", "wealth manage*", "Vermögensverwalt*", "private equity", "hedge fund*",
+        "credit", "Kredit*", "loan*", "mortgage*", "deposit*", "Einlage*", "*zins", "*zinsen", "Zinssatz*", "Zinswende", "interest rate*",
+        "payment*", "Zahlungsverkehr", "Visa", "Mastercard", "insurer*", "Versicherer",
+        "ECB", "EZB", "Federal Reserve", "Fed", "Bundesbank", "central bank*", "Notenbank*", "Zentralbank*",
+        "financial services", "Finanzdienstleist*", "Finanzbranche", "Finanzsektor", "financial sector", "Wall Street"
+      ]
+    },
+    {
+      "id": "innovation",
+      "label": "Fintech & Innovation",
+      "color": "#f59e0b",
+      "weight": 2,
+      "keywords": [
+        "fintech*", "neobank*", "challenger bank*", "Revolut", "Klarna", "N26", "Stripe", "Adyen", "Trade Republic",
+        "digital euro", "digitale* Euro*", "CBDC", "stablecoin*", "tokeni*", "Tokenisierung", "blockchain", "DLT",
+        "crypto*", "Krypto*", "bitcoin", "open banking", "open finance", "embedded finance", "instant payment*",
+        "Echtzeitzahlung*", "Wero", "digital transformation", "digitale Transformation", "Digitalisierung",
+        "innovation*", "Innovations*", "start-up*", "startup*", "quantum", "Quanten*", "automation", "Automatisierung",
+        "cloud", "cyber*", "robo-advis*"
+      ]
+    },
+    {
+      "id": "regulierung",
+      "label": "Regulierung & Aufsicht",
+      "color": "#ef4444",
+      "weight": 2,
+      "keywords": [
+        "regulat*", "Regulier*", "Regulator*", "supervis*", "Aufsicht*", "BaFin", "EBA", "ESMA", "SEC", "FCA",
+        "Basel", "Basel III", "Basel IV", "capital requirement*", "Eigenkapital*", "stress test*", "Stresstest*",
+        "MiCA", "DORA", "AI Act", "KI-Verordnung", "PSD3", "compliance", "anti-money laundering", "AML",
+        "Geldwäsche*", "sanction*", "Sanktion*", "fined", "fines", "Strafe*", "Bußgeld*", "lawsuit*", "Klage*"
+      ]
+    }
+  ],
+  "combos": [
+    {"id": "ki-finanzen", "label": "KI × Finanzen", "topics": ["ki", "finanzen"], "bonus": 3},
+    {"id": "ki-regulierung", "label": "KI × Regulierung", "topics": ["ki", "regulierung"], "bonus": 2},
+    {"id": "fintech-finanzen", "label": "Fintech × Banken", "topics": ["innovation", "finanzen"], "bonus": 1}
+  ],
+  "boost_words": {
+    "_hinweis": "Zusaetzliche Punkte, wenn eines dieser Woerter im Titel steht.",
+    "points": 2,
+    "words": ["exclusive", "exklusiv", "breaking", "eilmeldung", "launches", "startet", "acquire*", "übernimmt", "Übernahme", "merger", "Fusion", "job cuts", "Stellenabbau", "layoffs", "record", "Rekord"]
+  }
+}

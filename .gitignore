@@ -1,0 +1,6 @@
+# Wird vom Workflow erzeugt und auf dem Branch gh-pages veroeffentlicht
+docs/data/
+docs/.nojekyll
+__pycache__/
+*.pyc
+.DS_Store
