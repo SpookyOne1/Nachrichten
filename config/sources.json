@@ -15,7 +15,6 @@
     {"name": "Bloomberg Markets", "url": "https://feeds.bloomberg.com/markets/news.rss", "priority": 3, "lang": "en"},
     {"name": "Bloomberg Technology", "url": "https://feeds.bloomberg.com/technology/news.rss", "priority": 3, "lang": "en"},
     {"name": "Bloomberg Economics", "url": "https://feeds.bloomberg.com/economics/news.rss", "priority": 3, "lang": "en"},
-    {"name": "Bloomberg Wealth", "url": "https://feeds.bloomberg.com/wealth/news.rss", "priority": 2, "lang": "en"},
 
     {"name": "The Economist · Finance & economics", "url": "https://www.economist.com/finance-and-economics/rss.xml", "priority": 3, "lang": "en"},
     {"name": "The Economist · Business", "url": "https://www.economist.com/business/rss.xml", "priority": 3, "lang": "en"},
