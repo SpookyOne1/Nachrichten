@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Infozentrum KI & Finanzen</title>
+  <meta name="description" content="Aktuelle Nachrichten zu KI, Innovation und dem Wandel des Finanzsektors.">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Infozentrum">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="" width="30" height="30">
+      <div>
+        <h1>Infozentrum</h1>
+        <p id="updated" class="muted">Lade Nachrichten …</p>
+      </div>
+    </div>
+    <button id="refresh" class="icon-btn" title="Neu laden" aria-label="Neu laden">↻</button>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Themen"></nav>
+
+  <section class="controls">
+    <input id="search" type="search" placeholder="Suchen (z. B. Commerzbank, Stablecoin, Agent)…" autocomplete="off">
+    <details class="filters">
+      <summary>Filter &amp; Sortierung</summary>
+      <div class="row">
+      <select id="range" aria-label="Zeitraum">
+        <option value="24">Letzte 24 Std.</option>
+        <option value="72" selected>Letzte 3 Tage</option>
+        <option value="240">Letzte 10 Tage</option>
+      </select>
+      <select id="source" aria-label="Quelle"><option value="">Alle Quellen</option></select>
+      <select id="sort" aria-label="Sortierung">
+        <option value="time">Neueste zuerst</option>
+        <option value="score">Wichtigste zuerst</option>
+      </select>
+      <label class="toggle"><input id="onlyTop" type="checkbox"> Nur Top</label>
+      <label class="toggle"><input id="hideRead" type="checkbox"> Gelesene ausblenden</label>
+      </div>
+    </details>
+  </section>
+
+  <main>
+    <p id="count" class="muted"></p>
+    <ol id="list" class="list"></ol>
+    <p id="empty" class="empty" hidden>Keine Meldungen für diese Auswahl.</p>
+  </main>
+
+  <footer>
+    <details>
+      <summary id="health">Quellen</summary>
+      <ul id="sources" class="sources"></ul>
+    </details>
+    <p class="muted">Artikel von Bloomberg, The Economist, FT u. a. können ein Abo erfordern.
+      <a href="data/briefing.md">Tages-Briefing (Text)</a></p>
+  </footer>
+
+  <template id="card">
+    <li class="card">
+      <div class="meta"><span class="src"></span><span class="dot">·</span><time></time><span class="star" title="Top-Meldung">★ Top</span></div>
+      <a class="title" target="_blank" rel="noopener"></a>
+      <p class="summary"></p>
+      <div class="tags"></div>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
